@@ -1,0 +1,33 @@
+version: "3.9"
+
+volumes:
+  postgis-data:
+    driver: local
+
+services:
+  db:
+    image: postgis/postgis:14-3.2-alpine
+    volumes:
+      - postgis-data:/var/lib/postgresql/data
+      - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
+
+  flyway:
+    image: flyway/flyway
+    depends_on:
+      - db
+    profiles: [ "migration" ]
+    environment:
+      - FLYWAY_USER=${DB_USER}
+      - FLYWAY_PASSWORD=${DB_PASSWORD}
+      - FLYWAY_URL=jdbc:postgresql://db/${DB_NAME}
+    volumes:
+      - ./db/migrations:/flyway/sql
+      - ./db/flyway.conf:/flyway/conf/flyway.conf
+    command: migrate

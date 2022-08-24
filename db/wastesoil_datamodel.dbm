@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.4" use-changelog="false" last-position="0,0" last-zoom="1.15" max-obj-count="13"
+	 default-schema="wastesoil" default-owner="wastesoil_admin"
+	 layers="Default layer,views,other"
+	 active-layers="0"
+	 layer-name-colors="#000000,#000000,#000000"
+	 layer-rect-colors="#b4b4b4,#55ed3d,#fb7d34"
+	 show-layer-names="false" show-layer-rects="false">
+<role name="wastesoil_admin"
+ sql-disabled="true">
+</role>
+
+<database name="wastesoil" encoding="UTF8" lc-collate="en_US.utf8" lc-ctype="en_US.utf8" is-template="false" allow-conns="true">
+	<role name="wastesoil_admin"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" layers="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="wastesoil" layers="0" rect-visible="true" fill-color="#ffffff" sql-disabled="true">
+	<role name="postgres"/>
+</schema>
+
+<table name="soil" layers="0" collapse-mode="2" max-obj-count="9" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="340" y="240"/>
+	<column name="id" not-null="true"
+	 identity-type="ALWAYS">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="quantity" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="available_quantity">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="date_start">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_end">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="soil_pk" type="pk-constr" table="wastesoil.soil">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="site_id" index="7"/>
+		<object name="soil_type_code" index="6"/>
+		<object name="source_soil_id" index="5"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="site_fk" index="3"/>
+		<object name="soil_type_fk" index="2"/>
+		<object name="source_soil_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="deficit" layers="0" collapse-mode="2" max-obj-count="8" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="1000" y="260"/>
+	<column name="id" not-null="true"
+	 identity-type="ALWAYS">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="quantity" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="missing_quantity">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="date_start">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_end">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="deficit_pk" type="pk-constr" table="wastesoil.deficit">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="site_id" index="5"/>
+		<object name="soil_type_code" index="6"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="site_fk" index="1"/>
+		<object name="soil_type_fk" index="2"/>
+	</customidxs>
+</table>
+
+<extension name="postgis" sql-disabled="true">
+	<schema name="wastesoil"/>
+</extension>
+
+<table name="soil_type" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="900" y="20"/>
+	<column name="code" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="description" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="soil_type_pk" type="pk-constr" table="wastesoil.soil_type">
+		<columns names="code" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="origin_of_soil" type="rel1n" layers="0"
+	 src-col-pattern="source_{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="source_{st}_fk"
+	 custom-color="#c7bf76"
+	 src-table="wastesoil.soil"
+	 dst-table="wastesoil.soil"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<line>
+		<position x="595.178" y="334.817"/>
+	<position x="595.178" y="229"/>
+	<position x="502.785" y="229"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="47.5939" y="26.85"/>
+	</label>
+</relationship>
+
+<table name="site" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="460" y="20"/>
+	<column name="id" not-null="true"
+	 identity-type="ALWAYS">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="geom" not-null="true">
+		<type name="geometry" length="0" spatial-type="POLYGON" variation="0" srid="3857"/>
+	</column>
+	<constraint name="site_pk" type="pk-constr" table="wastesoil.site">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="deficities_of_soil_at_a_site" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#3cfa18"
+	 src-table="wastesoil.site"
+	 dst-table="wastesoil.deficit"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="5.72793" y="-118.758"/>
+	</label>
+</relationship>
+
+<relationship name="soil_type_of_a_soil" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#cf0287"
+	 src-table="wastesoil.soil_type"
+	 dst-table="wastesoil.soil"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="dst-label">
+		<position x="15.8225" y="-3.78871"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="soil_type_of_a_deficit" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#37bdfb"
+	 src-table="wastesoil.soil_type"
+	 dst-table="wastesoil.deficit"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="91.0731" y="-18.3323"/>
+	</label>
+</relationship>
+
+<table name="transport" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="180" y="620"/>
+	<column name="id" not-null="true"
+	 identity-type="ALWAYS">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="quantity" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="date">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="transfer_pk" type="pk-constr" table="wastesoil.transport">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="source_soil_id" index="1"/>
+		<object name="target_soil_id" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="soil_fk" index="1"/>
+		<object name="soil_fk1" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="source_soil_of_a_transport" type="rel1n" layers="0"
+	 src-col-pattern="source_{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#781d6c"
+	 src-table="wastesoil.soil"
+	 dst-table="wastesoil.transport"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="src-label">
+		<position x="-22.2161" y="10.55"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="-7.54276" y="5.85"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="-88.14" y="-26.5323"/>
+	</label>
+</relationship>
+
+<relationship name="target_soil_of_a_transport" type="rel1n" layers="0"
+	 src-col-pattern="target_{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f71f28"
+	 src-table="wastesoil.soil"
+	 dst-table="wastesoil.transport"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="src-label">
+		<position x="15.0279" y="10.55"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="15.403" y="5.85"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="30.9549" y="13.4677"/>
+	</label>
+</relationship>
+
+<table name="usage" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="1000" y="620"/>
+	<column name="id" not-null="true"
+	 identity-type="ALWAYS">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="quantity" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="date">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="usage_pk" type="pk-constr" table="wastesoil.usage">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="source_soil_of_usage" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#5890f9"
+	 src-table="wastesoil.soil"
+	 dst-table="wastesoil.usage"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="128.183" y="35.6232"/>
+	</label>
+</relationship>
+
+<relationship name="target_deficit_of_usage" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#7ebc5f"
+	 src-table="wastesoil.deficit"
+	 dst-table="wastesoil.usage"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="67.7718" y="3.06774"/>
+	</label>
+</relationship>
+
+<relationship name="bodies_of_soil_at_a_site" type="rel1n" layers="0"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#279246"
+	 src-table="wastesoil.site"
+	 dst-table="wastesoil.soil"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="-48.8356" y="-68.1323"/>
+	</label>
+</relationship>
+
+<table name="process" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="540" y="620"/>
+	<column name="id" not-null="true"
+	 identity-type="ALWAYS">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="material_quantity" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="product_quantity" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="date">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="process_pk" type="pk-constr" table="wastesoil.process">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="material_soil_id" index="1"/>
+		<object name="product_soil_id" index="3"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="material_soil_fk" index="1"/>
+		<object name="product_soil_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="material_soil_of_a_process" type="rel1n" layers="0"
+	 src-col-pattern="material_{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="material_{st}_fk"
+	 custom-color="#b5409b"
+	 src-table="wastesoil.soil"
+	 dst-table="wastesoil.process"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="name-label">
+		<position x="-73.0485" y="3.46774"/>
+	</label>
+</relationship>
+
+<relationship name="product_soil_of_a_process" type="rel1n" layers="0"
+	 src-col-pattern="product_{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="product_{st}_fk"
+	 custom-color="#542bef"
+	 src-table="wastesoil.soil"
+	 dst-table="wastesoil.process"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE">
+	<label ref-type="dst-label">
+		<position x="34.8822" y="5.85"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="95.5444" y="-16.5323"/>
+	</label>
+</relationship>
+
+<table name="flyway_schema_history" layers="2" sql-disabled="true" collapse-mode="2" faded-out="true" max-obj-count="12" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="1280" y="120"/>
+	<column name="installed_rank" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="version">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="description" not-null="true">
+		<type name="character varying" length="200"/>
+	</column>
+	<column name="type" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="script" not-null="true">
+		<type name="character varying" length="1000"/>
+	</column>
+	<column name="checksum">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="installed_by" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="installed_on" not-null="true" default-value="now()">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="execution_time" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="success" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<constraint name="flyway_schema_history_pk" type="pk-constr" table="wastesoil.flyway_schema_history">
+		<columns names="installed_rank" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="flyway_schema_history_s_idx" table="wastesoil.flyway_schema_history"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="90" sql-disabled="true">
+		<idxelement use-sorting="false">
+			<column name="success"/>
+		</idxelement>
+</index>
+
+<view name="v_transport" layers="1" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="80" y="1000"/>
+	<reference>
+		<expression><![CDATA[ SELECT tr.id,
+    src.site_id AS source_site_id,
+    tr.source_soil_id,
+    tgt.site_id AS target_site_id,
+    tr.target_soil_id,
+    tr.date,
+    tr.quantity
+   FROM ((wastesoil.transport tr
+     JOIN wastesoil.soil src ON ((tr.source_soil_id = src.id)))
+     JOIN wastesoil.soil tgt ON ((tr.target_soil_id = tgt.id)));]]></expression>
+	<column name="id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="source_site_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="source_soil_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="target_site_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="target_soil_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="date">
+		<type name="date" length="0"/>
+	</column>
+	<column name="quantity">
+		<type name="integer" length="0"/>
+	</column>
+		<reftable name="wastesoil.soil"/>
+		<reftable name="wastesoil.transport"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_transport_soil" type="reltv" layers="1"
+	 src-table="wastesoil.v_transport"
+	 dst-table="wastesoil.soil"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_transport_transport" type="reltv" layers="1"
+	 src-table="wastesoil.v_transport"
+	 dst-table="wastesoil.transport"
+	 src-required="false" dst-required="false"/>
+
+<view name="v_process" layers="1" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<position x="520" y="1020"/>
+	<reference>
+		<expression><![CDATA[ SELECT pr.id,
+    mat.site_id,
+    mat.id AS material_soil_id,
+    mat.soil_type_code AS material_soil_type_code,
+    pr.material_quantity,
+    prod.id AS product_soil_id,
+    prod.soil_type_code AS product_soil_type_code,
+    pr.product_quantity,
+    pr.date
+   FROM ((wastesoil.process pr
+     JOIN wastesoil.soil mat ON ((pr.material_soil_id = mat.id)))
+     JOIN wastesoil.soil prod ON ((pr.product_soil_id = prod.id)));]]></expression>
+	<column name="id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="site_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="material_soil_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="material_soil_type_code">
+		<type name="text" length="0"/>
+	</column>
+	<column name="material_quantity">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="product_soil_id">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="product_soil_type_code">
+		<type name="text" length="0"/>
+	</column>
+	<column name="product_quantity">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="date">
+		<type name="date" length="0"/>
+	</column>
+		<reftable name="wastesoil.soil"/>
+		<reftable name="wastesoil.process"/>
+	</reference>
+</view>
+
+<relationship name="rel_v_process_soil" type="reltv" layers="1"
+	 src-table="wastesoil.v_process"
+	 dst-table="wastesoil.soil"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_v_process_process" type="reltv" layers="1"
+	 src-table="wastesoil.v_process"
+	 dst-table="wastesoil.process"
+	 src-required="false" dst-required="false"/>
+
+<function name="count_missing_quantity_for_deficit"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		parallel-type="PARALLEL UNSAFE"
+		execution-cost="1"
+		row-amount="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<language name="sql"/>
+	<return-type>
+	<type name="integer" length="0"/>
+	</return-type>
+	<parameter name="id" in="true">
+		<type name="bigint" length="0"/>
+	</parameter>
+	<definition><![CDATA[select
+  sum(quantity)
+from (
+  select id deficit_id, quantity from mm.deficit
+  union all
+  select deficit_id, -1*quantity quantity from mm.usage
+) quantities
+where deficit_id = id;]]></definition>
+</function>
+
+<function name="count_availably_quantity_for_soil"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		parallel-type="PARALLEL UNSAFE"
+		execution-cost="1"
+		row-amount="0">
+	<schema name="wastesoil"/>
+	<role name="wastesoil_admin"/>
+	<language name="sql"/>
+	<return-type>
+	<type name="integer" length="0"/>
+	</return-type>
+	<parameter name="id" in="true">
+		<type name="bigint" length="0"/>
+	</parameter>
+	<definition><![CDATA[select
+  sum(maara)
+from (
+  select id soil_id, quantity maara from mm.soil
+  union all
+  select lahde_soil_id soil_id, -1*quantity maara from mm.transport
+  union all
+  select material_soil_id soil_id, -1*material_quantity maara from mm.process
+  union all
+  select soil_id, -1*quantity maara from mm.usage
+) quantities
+where soil_id = id;]]></definition>
+</function>
+
+<permission>
+	<object name="wastesoil" type="database"/>
+	<privileges connect="true" temporary="true"/>
+</permission>
+<permission>
+	<object name="wastesoil" type="database"/>
+	<roles names="wastesoil_admin"/>
+	<privileges create="true" connect="true" temporary="true"/>
+</permission>
+<permission>
+	<object name="wastesoil" type="database"/>
+	<privileges connect="true" temporary="true"/>
+</permission>
+</dbmodel>
